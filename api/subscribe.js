@@ -52,6 +52,13 @@ const handler = async (req, res) => {
     return res.status(400).json({ error: 'Geçerli bir e-posta adresi giriniz.' });
   }
 
+  if(!process.env.FROM_EMAIL){
+    return res.status(500).json({ error: 'Sunucu yapılandırması hatası: FROM_EMAIL ayarlı değil.' });
+  }
+  if(!process.env.ADMIN_EMAIL){
+    return res.status(500).json({ error: 'Sunucu yapılandırması hatası: ADMIN_EMAIL ayarlı değil.' });
+  }
+
   const adminMail = {
     from: process.env.FROM_EMAIL,
     to: process.env.ADMIN_EMAIL,
