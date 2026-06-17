@@ -1,0 +1,11 @@
+{
+  "name": "orionis-site",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "node server/server.js"
+  },
+  "dependencies": {
+    "nodemailer": "^6.9.3"
+  }
+}
