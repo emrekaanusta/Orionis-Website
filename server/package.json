@@ -1,0 +1,15 @@
+{
+  "name": "orionis-server",
+  "version": "1.0.0",
+  "description": "Simple subscription endpoint for Orionis site (uses Nodemailer)",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "dotenv": "^16.0.0",
+    "express": "^4.18.2",
+    "nodemailer": "^6.9.3"
+  }
+}

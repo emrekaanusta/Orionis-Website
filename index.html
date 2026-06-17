@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Orionis Tours — Keşfet, Yaşa, Anı Biriktir</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="#">Orionis</a>
+      <nav class="nav">
+        <a href="#tours">Turlar</a>
+        <a href="#about">Hakkımızda</a>
+        <a href="#contact">İletişim</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero">
+      <div class="hero-overlay"></div>
+      <div class="container hero-content">
+        <h1>Orionis ile Dünyayı Keşfedin</h1>
+        <p>Seçkin, özenle hazırlanmış turlar — anılar biriktirmek için yola çıkın.</p>
+        <a class="btn primary" href="#tours">Turlara Göz At</a>
+      </div>
+    </section>
+
+    <section id="tours" class="container tours-section">
+      <h2>Öne Çıkan Turlar</h2>
+      <div class="filters" role="tablist" aria-label="Tur kategorileri">
+        <button class="filter-btn active" data-filter="all" aria-pressed="true">Tüm Turlar</button>
+        <button class="filter-btn" data-filter="yurtici">Yurtiçi Turları</button>
+        <button class="filter-btn" data-filter="gunubirlik">Günübirlik Turlar</button>
+        <button class="filter-btn" data-filter="yurtdisi">Yurtdışı Turları</button>
+      </div>
+      <div class="tours-grid">
+        <article class="tour-card" data-category="yurtici">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60" alt="Ege Kıyıları">
+          <div class="card-body">
+            <h3 class="tour-title">Ege Kıyıları: Koylar & Lezzetler</h3>
+            <p class="muted">5 gün &middot; Küçük grup</p>
+            <p class="tour-desc">Mavi sular, sakin koylar ve Ege mutfağından lezzetler. Rahat tempoda keşif turu.</p>
+            <div class="card-footer">
+              <strong class="price">₺3.450</strong>
+              <button class="btn book-btn" data-title="Ege Kıyıları: Koylar & Lezzetler" data-price="₺3.450">Rezervasyon</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="tour-card" data-category="yurtici">
+          <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=60" alt="Kapadokya">
+          <div class="card-body">
+            <h3 class="tour-title">Kapadokya Balon Turu</h3>
+            <p class="muted">2 gün &middot; Küçük grup</p>
+            <p class="tour-desc">Şafakta sıcak hava balonları ile peribacalarının üzerinden unutulmaz manzaralar.</p>
+            <div class="card-footer">
+              <strong class="price">₺2.100</strong>
+              <button class="btn book-btn" data-title="Kapadokya Balon Turu" data-price="₺2.100">Rezervasyon</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="tour-card" data-category="gunubirlik">
+          <img src="https://images.unsplash.com/photo-1505765057119-3f7b0d4f4a16?auto=format&fit=crop&w=800&q=60" alt="Istanbul">
+          <div class="card-body">
+            <h3 class="tour-title">İstanbul Highlights</h3>
+            <p class="muted">1 gün &middot; Özel tur</p>
+            <p class="tour-desc">Tarihi yarımada, Boğaz manzaraları ve gizli lezzet duraklarıyla dolu yoğun bir gün.</p>
+            <div class="card-footer">
+              <strong class="price">₺950</strong>
+              <button class="btn book-btn" data-title="İstanbul Highlights" data-price="₺950">Rezervasyon</button>
+            </div>
+          </div>
+        </article>
+
+        <article class="tour-card" data-category="yurtdisi">
+          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60" alt="Yat Kaçamağı">
+          <div class="card-body">
+            <h3 class="tour-title">Akdeniz Yat Kaçamağı</h3>
+            <p class="muted">3 gün &middot; Küçük grup</p>
+            <p class="tour-desc">Konforlu yat, özel koylar ve yüzme molalarıyla kısa ama lüks bir deniz deneyimi.</p>
+            <div class="card-footer">
+              <strong class="price">₺4.200</strong>
+              <button class="btn book-btn" data-title="Akdeniz Yat Kaçamağı" data-price="₺4.200">Rezervasyon</button>
+            </div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <section id="about" class="container about-section">
+      <h2>Hakkımızda</h2>
+      <p>Orionis, deneyimli rehberlerle unutulmaz ve özenli seyahat deneyimleri sunar. Küçük gruplar, sürdürülebilir rota planlaması ve yerel kültüre saygı ilkelerimizdir.</p>
+    </section>
+
+    <section class="newsletter-section">
+      <div class="container">
+        <h3>Bizi Takip Edin</h3>
+        <p>E-Bültene Kaydol! Mail listemize katılın ve güncel fırsatlarımızdan haberdar olun.</p>
+        <form id="newsletterForm" class="newsletter-form" autocomplete="on">
+          <input name="name" type="text" placeholder="İsim (opsiyonel)" />
+          <input name="email" type="email" placeholder="E-mail adresinizi yazınız" required />
+          <button type="submit" class="btn primary">Kayıt ol</button>
+        </form>
+        <div id="newsletterMsg" class="muted" aria-live="polite"></div>
+      </div>
+    </section>
+
+    <section id="contact" class="container contact-section">
+      <h2>İletişim</h2>
+      <p>E-posta: <a href="mailto:info@orionis.com">info@orionis.com</a> &middot; Tel: +90 5xx xxx xx xx</p>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-columns">
+        <div class="footer-col">
+          <h4>Kurumsal</h4>
+          <ul>
+            <li><a href="#">Hakkımızda</a></li>
+            <li><a href="#">Hizmet Sözleşmesi</a></li>
+            <li><a href="#">Gizlilik Sözleşmesi</a></li>
+            <li><a href="#contact">İletişim</a></li>
+          </ul>
+        </div>
+        <div class="footer-col">
+          <h4>Otel Kategorileri</h4>
+          <p class="muted small">(örnek kategori listesi)</p>
+        </div>
+        <div class="footer-col">
+          <h4>Tur Kategorileri</h4>
+          <ul class="categories-list">
+            <li>1 Gece Konaklamalı</li>
+            <li>Avrupa Turları</li>
+            <li>Balkan Turları</li>
+            <li>Bayram Turları</li>
+            <li>Dubai Turları</li>
+            <li>Gap Turları</li>
+            <li>Gurme Turları</li>
+            <li>Karadeniz Turları</li>
+            <li>Kültür Turları</li>
+            <li>Yurtdışı Turları</li>
+            <li>Yurtiçi Turlar</li>
+          </ul>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <small>Copyright 2021 - Tüm Hakları Saklıdır. Acente2Namlı Medya | seo hizmeti</small>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Booking Modal -->
+  <div id="bookingModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Kapat">×</button>
+      <h3 id="modalTitle">Tur Rezervasyonu</h3>
+      <p id="modalPrice" class="muted"></p>
+      <form id="bookingForm">
+        <label>İsim
+          <input name="name" type="text" required />
+        </label>
+        <label>E-posta
+          <input name="email" type="email" required />
+        </label>
+        <label>Kişi Sayısı
+          <input name="guests" type="number" min="1" value="2" required />
+        </label>
+        <button type="submit" class="btn primary">Gönder</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
