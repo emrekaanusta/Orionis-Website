@@ -71,7 +71,23 @@ const handler = async (req, res) => {
     to: email,
     subject: 'Orionis — E-bülten kaydınız onaylandı',
     html: `
-      <div style=\"font-family:Arial,Helvetica,sans-serif;color:#0b1220\">\n        <h2>Merhaba ${name || ''}</h2>\n        <p>Orionis e-bültenine kayıt olduğunuz için teşekkürler. Size özel kampanyalardan ve yeni turlardan ilk siz haberdar olacaksınız.</p>\n        <p style=\"font-size:.9rem;color:#6b7280\">Bu e-postayı almayı istemiyorsanız reply ile bize bildirin veya aboneliğinizi iptal edin.</p>\n        <hr />\n        <p style=\"font-size:.85rem;color:#6b7280\">Orionis Tours</p>\n      </div>\n    `
+      <div style="font-family:Inter, Arial, Helvetica, sans-serif; color:#0b1220; max-width:680px; margin:0 auto;">
+        <div style="background:#0b1220;padding:28px 20px;border-radius:8px 8px 0 0;color:#fff;text-align:center;">
+          <h1 style="margin:0;font-size:24px;letter-spacing:0.2px">Orionis'e Hoş Geldiniz</h1>
+          <p style="margin:6px 0 0;font-size:14px;color:rgba(255,255,255,0.85)">Seyahat haberleri ve özel kampanyalar için başarıyla kaydoldunuz.</p>
+        </div>
+        <div style="background:#fff;padding:22px;border:1px solid #eef2f7;border-top:0;border-radius:0 0 8px 8px;">
+          <p style="font-size:16px;margin:0 0 12px">Merhaba ${name || ''},</p>
+          <p style="color:#374151;margin:0 0 12px">Orionis e-bültenine kayıt olduğunuz için teşekkür ederiz. Artık en yeni turlarımız, erken rezervasyon fırsatları ve özel indirimler hakkında ilk siz bilgilendirileceksiniz.</p>
+          <div style="margin:14px 0;text-align:center">
+            <a href="https://orionis-website-sage.vercel.app" style="display:inline-block;padding:10px 18px;background:#0b1220;color:#fff;border-radius:6px;text-decoration:none;font-weight:600">Keşfetmeye Başla</a>
+          </div>
+          <p style="font-size:13px;color:#6b7280;margin:14px 0 0">Bu e-postayı almak istemiyorsanız, lütfen cevap verin ya da aboneliğinizi iptal edin.</p>
+          <hr style="border:none;border-top:1px solid #eef2f7;margin:18px 0" />
+          <p style="font-size:12px;color:#9ca3af;margin:0">Orionis Tours • Güvenli seyahat planları</p>
+        </div>
+      </div>
+    `
   };
 
   try{

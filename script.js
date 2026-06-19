@@ -94,9 +94,30 @@ document.addEventListener('DOMContentLoaded', ()=>{
   form.addEventListener('submit', (e)=>{
     e.preventDefault();
     const data = new FormData(form);
-    // For now just show a friendly confirmation — integrate backend later
-    alert(`${modalTitle.textContent} için rezervasyon isteğiniz alındı. Teşekkürler, ${data.get('name')}!`);
-    form.reset();
-    closeModal();
+    const payload = {
+      name: data.get('name'),
+      email: data.get('email'),
+      phone: data.get('phone'),
+      tour: modalTitle.textContent,
+      date: data.get('date'),
+      pax: data.get('pax'),
+      notes: data.get('notes')
+    };
+    // show inline status instead of alert
+    const statusEl = document.getElementById('bookingStatus');
+    if(statusEl) statusEl.textContent = 'Gönderiliyor...';
+    fetch('/api/book', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
+      .then(r=>r.json().then(j=>({ok:r.ok, body:j})))
+      .then(({ok, body})=>{
+        if(ok){
+          if(statusEl) statusEl.innerHTML = 'Rezervasyon talebiniz alındı. Danışmanlarımız en kısa sürede sizinle iletişime geçecektir.';
+          form.reset(); closeModal();
+        } else {
+          statusEl.textContent = body.error || 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
+        }
+      }).catch(err=>{
+        console.error(err);
+        if(statusEl) statusEl.textContent = 'Sunucuya bağlanılamadı. Lütfen daha sonra tekrar deneyin.';
+      });
   });
 });
