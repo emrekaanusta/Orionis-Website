@@ -1,0 +1,30 @@
+[
+  {
+    "id": "t_mqm4s4sw",
+    "title": "Kuşadası Tur",
+    "price": "4900",
+    "duration": "2 gün",
+    "description": "afafsasfafsafsafsaf",
+    "hero": "/uploads/1781946178868_ffbe15e2-b7a2-4148-80d5-7b4e8aa9d1ba.JPEG",
+    "includes": [
+      "1 gün otel"
+    ],
+    "meeting": "Aydın Kipa",
+    "gallery": [
+      "/uploads/1781946178868_ffbe15e2-b7a2-4148-80d5-7b4e8aa9d1ba.JPEG"
+    ],
+    "timeline": [
+      {
+        "title": "1. gün ",
+        "desc": "kiki",
+        "img": "/uploads/1781946178868_ffbe15e2-b7a2-4148-80d5-7b4e8aa9d1ba.JPEG"
+      },
+      {
+        "title": "2. gün ",
+        "desc": "asfasfadsgasf",
+        "img": "/uploads/1781946178868_ffbe15e2-b7a2-4148-80d5-7b4e8aa9d1ba.JPEG"
+      }
+    ],
+    "yurtdisi": false
+  }
+]

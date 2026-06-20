@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Orionis — Admin</title>
+  <link rel="stylesheet" href="styles.css">
+  <style>
+    .admin-wrap{max-width:1100px;margin:32px auto;padding:20px}
+    .admin-login, .admin-panel{background:#0f1724;padding:18px;border-radius:8px;color:#e6eef8}
+    .form-row{margin-bottom:10px}
+    label{display:block;font-size:.9rem;margin-bottom:6px}
+    input[type=text], textarea, input[type=file]{width:100%;padding:8px;border-radius:6px;border:1px solid #2b4458;background:#071022;color:#e6eef8}
+    .btn{display:inline-block;padding:8px 12px;border-radius:6px;border:none;background:#0ea5a4;color:#012;cursor:pointer}
+    .muted{color:#9fb0c2}
+    .tour-list{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+    .tour-card{background:#071a27;padding:12px;border-radius:6px;min-width:220px}
+    .small{font-size:.85rem}
+  </style>
+</head>
+<body>
+  <div class="admin-wrap">
+    <h1 style="color:#e6eef8">Admin Panel</h1>
+
+    <div id="loginBox" class="admin-login">
+      <h3>Giriş</h3>
+      <div class="form-row"><label>Kullanıcı</label><input id="adminUser" type="text" value=""></div>
+      <div class="form-row"><label>Şifre</label><input id="adminPass" type="password" value=""></div>
+      <div class="form-row"><button id="loginBtn" class="btn">Giriş</button> <span id="loginMsg" class="muted"></span></div>
+    </div>
+
+    <div id="panel" class="admin-panel" style="display:none;margin-top:16px">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3>Turlar</h3>
+        <div>
+          <button id="newBtn" class="btn">Yeni Tur</button>
+          <button id="logoutBtn" class="btn">Çıkış</button>
+        </div>
+      </div>
+
+      <div class="tour-list" id="tourList"></div>
+
+      <hr style="margin:18px 0;border-color:#233a48" />
+
+      <form id="tourForm">
+        <input type="hidden" name="id" />
+        <div class="form-row"><label>Başlık</label><input name="title" type="text" required></div>
+        <div class="form-row"><label>Fiyat</label><input name="price" type="text"></div>
+        <div class="form-row"><label>Süre (ör. 5 gün)</label><input name="duration" type="text"></div>
+        <div class="form-row"><label>Açıklama</label><textarea name="description" rows="4"></textarea></div>
+        <div class="form-row"><label>Hero image URL (veya yükleyin)</label><input name="hero" type="text"></div>
+
+        <h4 style="margin-top:12px">Galeri</h4>
+        <div class="form-row"><div id="galleryList"></div></div>
+        <div class="form-row"><label>Galeriye URL ekle</label><input id="galleryUrl" type="text"><button id="addGalleryUrl" class="btn" type="button">Ekle</button>
+          <datalist id="galleryOptions"></datalist>
+        </div>
+
+        <h4 style="margin-top:12px">Zaman Çizelgesi</h4>
+        <div id="timelineItems" style="margin-bottom:8px"></div>
+        <div class="form-row"><button id="addTimelineItem" class="btn" type="button">Yeni Gün Ekle</button></div>
+
+        <div class="form-row"><label>Yurtdışı mi? <input type="checkbox" name="yurtdisi"></label></div>
+        <div class="form-row"><label>Dahil Olanlar (her satıra bir madde)</label><textarea name="includes" rows="3" placeholder="Örn: Otel, Kahvaltı, Transfer"></textarea></div>
+        <div class="form-row"><label>Toplanma Noktası</label><input name="meeting" type="text" placeholder="Adres veya toplanma açıklaması"></div>
+        <div class="form-row"><label>Resim yükle (seç -> önizle -> Yükle ve Galeriye Ekle)</label><input id="fileInput" type="file" accept="image/*"></div>
+        <div id="uploadPreview" class="form-row" style="display:none"></div>
+        <div class="form-row"><button id="uploadBtn" class="btn" type="button">Yükle ve Galeriye Ekle</button> <span id="uploadMsg" class="muted small"></span></div>
+        <div class="form-row"><button class="btn" id="saveBtn" type="submit">Kaydet</button> <span id="saveMsg" class="muted small"></span></div>
+      </form>
+    </div>
+  </div>
+
+  <script src="admin.js"></script>
+</body>
+</html>

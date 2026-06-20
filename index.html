@@ -11,11 +11,13 @@
   <header class="site-header">
     <div class="container header-inner">
       <a class="brand" href="#">Orionis</a>
-      <nav class="nav">
-        <a href="#tours">Turlar</a>
-        <a href="#about">Hakkımızda</a>
-        <a href="#contact">İletişim</a>
-      </nav>
+      <div style="display:flex;align-items:center;gap:1rem">
+        <nav class="nav">
+          <a href="#tours">Turlar</a>
+          <a href="#about">Hakkımızda</a>
+          <a href="#contact">İletişim</a>
+        </nav>
+      </div>
     </div>
   </header>
 
@@ -37,9 +39,16 @@
         <button class="filter-btn" data-filter="gunubirlik">Günübirlik Turlar</button>
         <button class="filter-btn" data-filter="yurtdisi">Yurtdışı Turları</button>
       </div>
+      <!-- Moved search here as requested: under Öne Çıkan Turlar -->
+      <div style="margin-top:.6rem;">
+        <form id="tourSearch" class="header-search" role="search">
+          <input name="q" type="search" placeholder="Tur ara..." aria-label="Tur ara" />
+          <button type="submit" class="btn ghost">ARA</button>
+        </form>
+      </div>
       <div class="tours-grid">
         <article class="tour-card" data-category="yurtici">
-          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60" alt="Ege Kıyıları">
+          <img src="https://picsum.photos/id/1011/1200/800" alt="Ege Kıyıları">
           <div class="card-body">
             <h3 class="tour-title">Ege Kıyıları: Koylar & Lezzetler</h3>
             <p class="muted">5 gün &middot; Küçük grup</p>
@@ -55,7 +64,7 @@
         </article>
 
         <article class="tour-card" data-category="yurtici">
-          <img src="https://images.unsplash.com/photo-1526772662000-3f88f10405ff?auto=format&fit=crop&w=800&q=60" alt="Kapadokya">
+          <img src="https://picsum.photos/id/1003/1200/800" alt="Kapadokya">
           <div class="card-body">
             <h3 class="tour-title">Kapadokya Balon Turu</h3>
             <p class="muted">2 gün &middot; Küçük grup</p>
@@ -71,7 +80,7 @@
         </article>
 
         <article class="tour-card" data-category="gunubirlik">
-          <img src="https://images.unsplash.com/photo-1526481280698-9f7f9a4d1d4d?auto=format&fit=crop&w=800&q=60" alt="Istanbul">
+          <img src="https://picsum.photos/id/1015/1200/800" alt="Istanbul">
           <div class="card-body">
             <h3 class="tour-title">İstanbul Highlights</h3>
             <p class="muted">1 gün &middot; Özel tur</p>
@@ -87,7 +96,7 @@
         </article>
 
         <article class="tour-card" data-category="yurtdisi">
-          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=800&q=60" alt="Yat Kaçamağı">
+          <img src="https://picsum.photos/id/1016/1200/800" alt="Yat Kaçamağı">
           <div class="card-body">
             <h3 class="tour-title">Akdeniz Yat Kaçamağı</h3>
             <p class="muted">3 gün &middot; Küçük grup</p>
@@ -130,39 +139,21 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <div class="footer-columns">
-        <div class="footer-col">
-          <h4>Kurumsal</h4>
-          <ul>
-            <li><a href="#">Hakkımızda</a></li>
-            <li><a href="#">Hizmet Sözleşmesi</a></li>
-            <li><a href="#">Gizlilik Sözleşmesi</a></li>
-            <li><a href="#contact">İletişim</a></li>
-          </ul>
-        </div>
-        <div class="footer-col">
-          <h4>Otel Kategorileri</h4>
-          <p class="muted small">(örnek kategori listesi)</p>
-        </div>
-        <div class="footer-col">
-          <h4>Tur Kategorileri</h4>
-          <ul class="categories-list">
-            <li>1 Gece Konaklamalı</li>
-            <li>Avrupa Turları</li>
-            <li>Balkan Turları</li>
-            <li>Bayram Turları</li>
-            <li>Dubai Turları</li>
-            <li>Gap Turları</li>
-            <li>Gurme Turları</li>
-            <li>Karadeniz Turları</li>
-            <li>Kültür Turları</li>
-            <li>Yurtdışı Turları</li>
-            <li>Yurtiçi Turlar</li>
-          </ul>
+      <div class="footer-left">
+        <div class="socials">
+          <a href="#" aria-label="facebook">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 12.07C22 6.48 17.52 2 11.93 2S2 6.48 2 12.07c0 5 3.66 9.13 8.44 9.95v-7.04H7.9v-2.91h2.54V9.41c0-2.5 1.49-3.88 3.77-3.88 1.09 0 2.23.2 2.23.2v2.46h-1.26c-1.24 0-1.63.77-1.63 1.56v1.88h2.78l-.44 2.91h-2.34V22C18.34 21.2 22 17.08 22 12.07z" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="twitter">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M22 5.92c-.63.28-1.3.46-2 .55.72-.43 1.27-1.11 1.53-1.92-.68.4-1.43.7-2.23.86A3.47 3.47 0 0016.5 4c-1.92 0-3.48 1.6-3.48 3.57 0 .28.03.55.09.81C9.7 8.22 6.1 6.4 3.9 3.46c-.31.53-.48 1.15-.48 1.81 0 1.24.62 2.33 1.57 2.97-.58-.02-1.12-.18-1.6-.44v.04c0 1.73 1.24 3.17 2.87 3.5-.3.08-.61.12-.93.12-.23 0-.45-.02-.66-.06.45 1.44 1.75 2.49 3.29 2.52A6.95 6.95 0 012 19.54 9.8 9.8 0 007.29 21c6.79 0 10.51-5.78 10.51-10.79 0-.16 0-.31-.01-.47.72-.51 1.34-1.15 1.83-1.88-.66.3-1.37.5-2.11.59z" fill="currentColor"/></svg>
+          </a>
+          <a href="#" aria-label="instagram">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7 2h10a5 5 0 015 5v10a5 5 0 01-5 5H7a5 5 0 01-5-5V7a5 5 0 015-5zm9 4.2a1 1 0 100 2 1 1 0 000-2zM12 7.3a4.7 4.7 0 100 9.4 4.7 4.7 0 000-9.4zm0 2a2.7 2.7 0 110 5.4 2.7 2.7 0 010-5.4z" fill="currentColor"/></svg>
+          </a>
         </div>
       </div>
-      <div class="footer-bottom">
-        <small>Copyright 2021 - Tüm Hakları Saklıdır. Acente2Namlı Medya | seo hizmeti</small>
+      <div class="footer-right">
+        <small>Copyright 2021 - Orionis</small>
       </div>
     </div>
   </footer>
@@ -193,6 +184,15 @@
         <div id="bookingStatus" class="muted" aria-live="polite" style="margin-top:8px"></div>
         <button type="submit" class="btn primary">Gönder</button>
       </form>
+    </div>
+  </div>
+
+  <!-- Lightbox (global) -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" aria-label="Kapat">✕</button>
+      <img src="" alt="" />
+      <div class="lightbox-caption"></div>
     </div>
   </div>
 

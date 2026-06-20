@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Orionis — Tur Detayı</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">Orionis</a>
+      <div style="display:flex;align-items:center;gap:1rem">
+        <nav class="nav">
+          <a href="/#tours">Turlar</a>
+          <a href="/#about">Hakkımızda</a>
+          <a href="/#contact">İletişim</a>
+        </nav>
+      </div>
+    </div>
+  </header>
+
+  <main class="container tour-detail">
+    <div class="detail-header">
+      <h1 id="title">Tur Başlığı</h1>
+      <p class="muted" id="meta">Süre · Tür</p>
+    </div>
+    <div id="hero" class="detail-hero" style="background-image:url('https://picsum.photos/1600/900')"></div>
+
+    <div class="detail-grid">
+      <section class="detail-main">
+        <h2>Genel Bakış</h2>
+        <div id="desc"></div>
+
+        <h3>Günlük Program & Zaman Çizelgesi</h3>
+        <div class="panel">
+          <div class="timeline" id="timeline"></div>
+        </div>
+
+        <h3>Ek Fotoğraflar</h3>
+        <div class="gallery" id="gallery"></div>
+      </section>
+
+      <aside class="detail-aside">
+        <div class="info-box">
+          <div class="price" id="price">₺0</div>
+          <p class="muted" id="priceMeta">Kişi başı · Süre</p>
+          <button class="btn primary book-btn" id="bookBtn">Rezervasyon Yap</button>
+          <hr />
+          <h4>Dahil Olanlar</h4>
+          <ul id="includes"></ul>
+          <h4>Toplanma Noktası</h4>
+          <p class="muted" id="meetingPoint"></p>
+        </div>
+      </aside>
+    </div>
+  </main>
+
+  <!-- booking modal (same markup as homepage) -->
+  <div id="bookingModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Kapat">×</button>
+      <h3 id="modalTitle">Tur Rezervasyonu</h3>
+      <p id="modalPrice" class="muted"></p>
+      <form id="bookingForm">
+        <label>İsim
+          <input name="name" type="text" required />
+        </label>
+        <label>E-posta
+          <input name="email" type="email" required />
+        </label>
+        <label>Telefon
+          <input name="phone" type="tel" placeholder="Örnek: +90555..." />
+        </label>
+        <label>Kişi Sayısı
+          <input name="pax" type="number" min="1" value="2" required />
+        </label>
+        <label>Notlar (opsiyonel)
+          <textarea name="notes" rows="3" placeholder="Özel istekler veya notlar"></textarea>
+        </label>
+        <div id="bookingStatus" class="muted" aria-live="polite" style="margin-top:8px"></div>
+        <button type="submit" class="btn primary">Gönder</button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Lightbox -->
+  <div id="lightbox" class="lightbox" aria-hidden="true">
+    <div class="lightbox-inner">
+      <button class="lightbox-close" aria-label="Kapat">✕</button>
+      <img src="" alt="" />
+      <div class="lightbox-caption"></div>
+    </div>
+  </div>
+
+  <script src="tour.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

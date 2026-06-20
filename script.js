@@ -5,8 +5,120 @@ document.addEventListener('DOMContentLoaded', ()=>{
     if(window.scrollY > 20) header.classList.add('scrolled');
     else header.classList.remove('scrolled');
   }
+
+  // Header search (filters tour cards by title or category)
+  const searchForm = document.getElementById('tourSearch');
+  if(searchForm){
+    searchForm.addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const q = (new FormData(searchForm).get('q')||'').trim().toLowerCase();
+      const currentTours = getTours();
+      if(!currentTours || currentTours.length===0){
+        // if no tour cards on this page, navigate to home with anchor
+        if(q) window.location.href = `./index.html#tours`; else window.location.href = `./index.html`;
+        return;
+      }
+      currentTours.forEach(t => {
+        const title = (t.querySelector('.tour-title')?.textContent||'').toLowerCase();
+        const cat = (t.dataset.category||'').toLowerCase();
+        if(!q || title.includes(q) || cat.includes(q)) t.style.display = '';
+        else t.style.display = 'none';
+      });
+    });
+  }
+
+  // Footer newsletter removed — using main newsletter section instead
+
+  // Lightbox: attach to gallery, timeline and card images
+  function openLightbox(src, alt){
+    let lb = document.getElementById('lightbox');
+    if(!lb) return;
+    const img = lb.querySelector('img');
+    const cap = lb.querySelector('.lightbox-caption');
+    img.src = src; img.alt = alt || '';
+    cap.textContent = alt || '';
+    lb.setAttribute('aria-hidden','false');
+    document.body.classList.add('lightbox-open');
+  }
+  function closeLightbox(){
+    const lb = document.getElementById('lightbox'); if(!lb) return;
+    lb.setAttribute('aria-hidden','true');
+    const img = lb.querySelector('img'); img.src = '';
+    document.body.classList.remove('lightbox-open');
+  }
+  // Global click handler: handle lightbox close first, backdrop click, then image clicks
+  document.addEventListener('click', (e)=>{
+    // Close when clicking close button
+    if(e.target.closest && e.target.closest('.lightbox-close')){ closeLightbox(); return; }
+
+    // Close when clicking on backdrop (outside inner)
+    const lb = document.getElementById('lightbox');
+    if(lb && (e.target === lb || e.target.closest && e.target.closest('.lightbox') === lb && !e.target.closest('.lightbox-inner'))){
+      closeLightbox(); return;
+    }
+
+    // Open lightbox for images inside our components
+    const img = e.target.closest && e.target.closest('img');
+    if(!img) return;
+    if(img.closest('.gallery') || img.closest('.timeline-img') || img.closest('.tour-card')){
+      e.preventDefault(); openLightbox(img.src, img.alt || '');
+    }
+  });
+  document.addEventListener('keydown', (e)=>{ if(e.key==='Escape') closeLightbox(); });
   onScrollHeader();
   window.addEventListener('scroll', onScrollHeader, {passive:true});
+
+  // Fetch dynamic tours from server (if any) and render them into .tours-grid
+  async function fetchAndRenderTours(){
+    try{
+      const res = await fetch('/api/tours');
+      if(!res.ok) return;
+      const data = await res.json();
+      const list = data.tours || [];
+      if(list.length===0) return;
+      const grid = document.querySelector('.tours-grid');
+      if(!grid) return;
+      list.forEach(t=>{
+        const a = document.createElement('article'); a.className='tour-card';
+        a.dataset.category = t.yurtdisi ? 'yurtdisi' : (t.duration && t.duration.includes('1 gün') ? 'gunubirlik' : 'yurtici');
+        a.innerHTML = `
+          <img src="${t.hero || 'https://picsum.photos/1200/800'}" alt="${t.title||''}">
+          <div class="card-body">
+            <h3 class="tour-title">${t.title||''}</h3>
+            <p class="muted">${t.duration||''}</p>
+            <p class="tour-desc">${t.description||''}</p>
+            <div class="card-footer">
+              <strong class="price">${t.price||''}</strong>
+              <div style="display:flex;gap:.5rem">
+                <a class="btn ghost" href="/tour.html?id=${t.id||''}">Detay</a>
+                <button class="btn book-btn" data-title="${t.title||''}" data-price="${t.price||''}">Rezervasyon</button>
+              </div>
+            </div>
+          </div>`;
+        // prepend so existing static cards remain visible
+        grid.insertBefore(a, grid.firstChild);
+      });
+      // rebind tours variable and book buttons
+      bindDynamicTours();
+    }catch(err){ console.warn('No dynamic tours', err); }
+  }
+
+  function bindDynamicTours(){
+    // update tours NodeList used by search and filters
+    const newTours = document.querySelectorAll('.tour-card');
+    // re-run current filter
+    // replace local reference by reassigning variable (note: original 'tours' declared later)
+    // Attach booking handlers
+    document.querySelectorAll('.book-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{ openModal(btn.dataset.title || 'Tur', btn.dataset.price || ''); });
+    });
+  }
+
+  fetchAndRenderTours().then(()=>{
+    // after potential dynamic load, refresh the 'tours' NodeList used earlier
+    // Note: re-query the NodeList so filtering/search use the dynamic content
+    // This simple approach assumes static filters applied after load
+  });
 
   const modal = document.getElementById('bookingModal');
   const modalTitle = document.getElementById('modalTitle');
@@ -16,10 +128,10 @@ document.addEventListener('DOMContentLoaded', ()=>{
 
   // Category filtering
   const filterBtns = document.querySelectorAll('.filter-btn');
-  const tours = document.querySelectorAll('.tour-card');
+  function getTours(){ return document.querySelectorAll('.tour-card'); }
 
   function applyFilter(filter){
-    tours.forEach(t => {
+    getTours().forEach(t => {
       const cat = t.dataset.category || '';
       if(filter === 'all' || filter === cat) t.style.display = '';
       else t.style.display = 'none';

@@ -6,12 +6,51 @@ dotenv.config({ path: path.join(__dirname, '.env') });
 const express = require('express');
 const nodemailer = require('nodemailer');
 const https = require('https');
+const fs = require('fs');
+const crypto = require('crypto');
+const os = require('os');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+// Increase limits to allow large base64 image uploads from admin UI
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
+// helper: simple cookie parser
+function parseCookies(req){
+  const header = req.headers.cookie || '';
+  return header.split(';').map(s=>s.trim()).filter(Boolean).reduce((acc,c)=>{
+    const [k,v] = c.split('='); acc[k]=decodeURIComponent(v); return acc;
+  }, {});
+}
+
+function requireAdmin(req,res,next){
+  try{
+    const cookies = parseCookies(req);
+    const user = cookies.admin_user;
+    const sig = cookies.admin_sig;
+    const secret = process.env.ADMIN_SECRET || 'orionis_dev_secret';
+    if(!user || !sig){ return res.status(401).json({ error: 'Unauthorized' }); }
+    const expected = crypto.createHmac('sha256', secret).update(user).digest('hex');
+    if(!crypto.timingSafeEqual(Buffer.from(expected), Buffer.from(sig))){
+      return res.status(401).json({ error: 'Unauthorized' });
+    }
+    req.adminUser = user;
+    return next();
+  }catch(e){
+    return res.status(401).json({ error: 'Unauthorized' });
+  }
+}
+
+// Ensure data folders exist
+const DATA_DIR = path.join(__dirname, '..', 'data');
+const UPLOADS_DIR = path.join(__dirname, '..', 'uploads');
+if(!fs.existsSync(DATA_DIR)) fs.mkdirSync(DATA_DIR, { recursive: true });
+if(!fs.existsSync(UPLOADS_DIR)) fs.mkdirSync(UPLOADS_DIR, { recursive: true });
+
+const TOURS_FILE = path.join(DATA_DIR, 'tours.json');
+if(!fs.existsSync(TOURS_FILE)) fs.writeFileSync(TOURS_FILE, JSON.stringify([]));
 
 // Serve static site (root is project folder parent)
 app.use('/', express.static(path.join(__dirname, '..')));
@@ -54,6 +93,117 @@ createTransporter().catch(err=>{
 
 // Simple health
 app.get('/api/health', (req, res)=> res.json({ ok: true }));
+
+// Admin login (sets an HttpOnly cookie)
+app.post('/api/admin/login', (req,res)=>{
+  const { user, pass } = req.body || {};
+  const adminUser = process.env.ADMIN_USER || 'admin';
+  const adminPass = process.env.ADMIN_PASS || 'admin';
+  const secret = process.env.ADMIN_SECRET || 'orionis_dev_secret';
+  if(user === adminUser && pass === adminPass){
+    const sig = crypto.createHmac('sha256', secret).update(user).digest('hex');
+    // Set cookies: admin_user (plain), admin_sig (HMAC) — HttpOnly for sig
+    res.setHeader('Set-Cookie', [
+      `admin_user=${encodeURIComponent(user)}; Path=/; SameSite=Lax`,
+      `admin_sig=${sig}; Path=/; HttpOnly; SameSite=Lax`
+    ]);
+    return res.json({ ok: true });
+  }
+  return res.status(401).json({ error: 'Invalid credentials' });
+});
+
+app.post('/api/admin/logout', (req,res)=>{
+  res.setHeader('Set-Cookie', [
+    `admin_user=; Path=/; Max-Age=0; SameSite=Lax`,
+    `admin_sig=; Path=/; Max-Age=0; HttpOnly; SameSite=Lax`
+  ]);
+  return res.json({ ok: true });
+});
+
+// Tours CRUD
+app.get('/api/admin/tours', requireAdmin, (req,res)=>{
+  try{
+    const raw = fs.readFileSync(TOURS_FILE, 'utf8');
+    const tours = JSON.parse(raw || '[]');
+    return res.json({ tours });
+  }catch(e){
+    console.error('Failed to read tours', e);
+    return res.status(500).json({ error: 'Failed to read tours' });
+  }
+});
+
+app.post('/api/admin/tours', requireAdmin, (req,res)=>{
+  try{
+    const payload = req.body || {};
+    const raw = fs.readFileSync(TOURS_FILE, 'utf8');
+    const tours = JSON.parse(raw || '[]');
+    if(payload.id){
+      // update
+      const idx = tours.findIndex(t=>t.id === payload.id);
+      if(idx === -1) return res.status(404).json({ error: 'Tour not found' });
+      tours[idx] = Object.assign({}, tours[idx], payload);
+    } else {
+      // create
+      const id = 't_' + Date.now().toString(36);
+      tours.push(Object.assign({ id }, payload));
+    }
+    fs.writeFileSync(TOURS_FILE, JSON.stringify(tours, null, 2));
+    return res.json({ ok: true, tours });
+  }catch(e){
+    console.error('Failed to write tours', e);
+    return res.status(500).json({ error: 'Failed to save tour' });
+  }
+});
+
+// Delete a tour
+app.delete('/api/admin/tours/:id', requireAdmin, (req,res)=>{
+  try{
+    const id = req.params.id;
+    const raw = fs.readFileSync(TOURS_FILE, 'utf8');
+    let tours = JSON.parse(raw || '[]');
+    const idx = tours.findIndex(t=>t.id === id);
+    if(idx === -1) return res.status(404).json({ error: 'Tour not found' });
+    tours.splice(idx,1);
+    fs.writeFileSync(TOURS_FILE, JSON.stringify(tours, null, 2));
+    return res.json({ ok: true, tours });
+  }catch(e){
+    console.error('Failed to delete tour', e);
+    return res.status(500).json({ error: 'Failed to delete tour' });
+  }
+});
+
+// Upload image as base64 JSON { filename, data }
+app.post('/api/admin/upload', requireAdmin, express.json({limit: '50mb'}), (req,res)=>{
+  try{
+    const { filename, data } = req.body || {};
+    if(!filename || !data) return res.status(400).json({ error: 'filename and data required' });
+    // data may be data:<mime>;base64,xxxx or plain base64
+    const comma = data.indexOf(',');
+    const base64 = (comma >=0) ? data.slice(comma+1) : data;
+    const buf = Buffer.from(base64, 'base64');
+    const safeName = Date.now() + '_' + filename.replace(/[^a-zA-Z0-9.\-_]/g,'_');
+    const outPath = path.join(UPLOADS_DIR, safeName);
+    fs.writeFileSync(outPath, buf);
+    // return public URL path
+    const publicUrl = `/uploads/${safeName}`;
+    return res.json({ ok: true, url: publicUrl });
+  }catch(e){
+    console.error('Upload error', e);
+    return res.status(500).json({ error: 'Upload failed' });
+  }
+});
+
+// Public endpoint: list tours (used by homepage)
+app.get('/api/tours', (req,res)=>{
+  try{
+    const raw = fs.readFileSync(TOURS_FILE, 'utf8');
+    const tours = JSON.parse(raw || '[]');
+    return res.json({ tours });
+  }catch(e){
+    console.error('Failed to read tours', e);
+    return res.status(500).json({ error: 'Failed to read tours' });
+  }
+});
 
 // Helper: send via Mailgun HTTP API (no extra deps)
 function mailgunSend(domain, apiKey, formObj){
