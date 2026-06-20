@@ -236,3 +236,5 @@ app.post('/api/book', async (req, res) => {
 app.listen(PORT, ()=>{
   console.log(`Server running on http://localhost:${PORT}`);
 });
+// Debug: print whether required env vars are present (don't print secrets)
+console.log('Env check — FROM_EMAIL set?', !!process.env.FROM_EMAIL, 'ADMIN_EMAIL set?', !!process.env.ADMIN_EMAIL);
