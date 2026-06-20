@@ -117,6 +117,11 @@ app.post('/api/subscribe', async (req, res) => {
   };
 
   try{
+    // validate required env vars early to avoid Nodemailer EENVELOPE
+    if(!process.env.FROM_EMAIL || !process.env.ADMIN_EMAIL){
+      console.error('Email configuration missing: FROM_EMAIL or ADMIN_EMAIL not set');
+      return res.status(500).json({ error: 'Sunucu yapılandırması eksik: FROM_EMAIL veya ADMIN_EMAIL ayarlı değil.' });
+    }
     const mgKey = process.env.MAILGUN_API_KEY;
     const mgDomain = process.env.MAILGUN_DOMAIN;
     const result = { message: 'Kayıt başarılı. Onay e-postası gönderildi.' };
@@ -133,6 +138,7 @@ app.post('/api/subscribe', async (req, res) => {
     }
 
     // fallback to transporter (SMTP or Ethereal)
+    console.log('Sending subscribe emails', { adminMail, userMail });
     const infoAdmin = await transporter.sendMail(adminMail);
     const infoUser = await transporter.sendMail(userMail);
     if(transporter.__isEthereal){
@@ -144,6 +150,83 @@ app.post('/api/subscribe', async (req, res) => {
   }catch(err){
     console.error('Mail send error', err);
     return res.status(500).json({ error: 'E-posta gönderilirken hata oluştu. Lütfen daha sonra tekrar deneyin.' });
+  }
+});
+
+// Booking endpoint (local fallback for testing)
+app.post('/api/book', async (req, res) => {
+  const { name, email, phone, tour, date, pax, notes } = req.body || {};
+  if(!email || !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email) || !name){
+    return res.status(400).json({ error: 'Lütfen isim ve geçerli bir e-posta adresi sağlayın.' });
+  }
+
+  const adminMail = {
+    from: process.env.FROM_EMAIL,
+    to: process.env.ADMIN_EMAIL,
+    subject: `Yeni rezervasyon: ${tour} — ${name}`,
+    html: `<h3>Yeni rezervasyon talebi</h3>
+      <ul>
+        <li>İsim: ${name}</li>
+        <li>E-posta: ${email}</li>
+        <li>Telefon: ${phone || '-'} </li>
+        <li>Tur: ${tour || '-'} </li>
+        <li>Tarih: ${date || '-'} </li>
+        <li>Kişi sayısı: ${pax || '-'} </li>
+        <li>Notlar: ${notes || '-'}</li>
+      </ul>`
+  };
+
+  const userMail = {
+    from: process.env.FROM_EMAIL,
+    to: email,
+    subject: `Rezervasyon talebiniz alındı — ${tour}`,
+    html: `
+      <div style="font-family:Arial,Helvetica,sans-serif;color:#0b1220">
+        <h3>Teşekkürler, ${name}</h3>
+        <p>Rezervasyon talebiniz alındı. Aşağıdaki bilgilerle kaydınız oluşturuldu:</p>
+        <ul>
+          <li>Tur: ${tour || '-'}</li>
+          <li>Tarih: ${date || '-'}</li>
+          <li>Kişi sayısı: ${pax || '-'}</li>
+        </ul>
+        <p>Danışmanlarımız en kısa sürede sizinle iletişime geçecektir.</p>
+        <p style="font-size:.9rem;color:#6b7280">İyi yolculuklar — Orionis</p>
+      </div>
+    `
+  };
+
+  try{
+    // validate required env vars early to avoid Nodemailer EENVELOPE
+    if(!process.env.FROM_EMAIL || !process.env.ADMIN_EMAIL){
+      console.error('Email configuration missing: FROM_EMAIL or ADMIN_EMAIL not set');
+      return res.status(500).json({ error: 'Sunucu yapılandırması eksik: FROM_EMAIL veya ADMIN_EMAIL ayarlı değil.' });
+    }
+
+    const mgKey = process.env.MAILGUN_API_KEY;
+    const mgDomain = process.env.MAILGUN_DOMAIN;
+    const result = { message: 'Rezervasyon talebiniz alındı.' };
+
+    if(mgKey && mgDomain){
+      const adminForm = { from: adminMail.from, to: adminMail.to, subject: adminMail.subject, html: adminMail.html };
+      const userForm = { from: userMail.from, to: userMail.to, subject: userMail.subject, html: userMail.html };
+      const infoAdmin = await mailgunSend(mgDomain, mgKey, adminForm);
+      const infoUser = await mailgunSend(mgDomain, mgKey, userForm);
+      result.mailgun = { admin: infoAdmin, user: infoUser };
+      return res.json(result);
+    }
+
+    console.log('Sending booking emails', { adminMail, userMail });
+    const infoAdmin = await transporter.sendMail(adminMail);
+    const infoUser = await transporter.sendMail(userMail);
+    if(transporter.__isEthereal){
+      result.adminPreview = nodemailer.getTestMessageUrl(infoAdmin);
+      result.userPreview = nodemailer.getTestMessageUrl(infoUser);
+      console.log('Ethereal preview URLs:', result.adminPreview, result.userPreview);
+    }
+    return res.json(result);
+  }catch(err){
+    console.error('Booking send error', err);
+    return res.status(500).json({ error: 'Rezervasyon gönderilirken hata oluştu. Lütfen daha sonra tekrar deneyin.' });
   }
 });
 
