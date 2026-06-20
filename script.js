@@ -47,10 +47,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
         const res = await fetch('/api/subscribe', {
           method: 'POST', headers: {'Content-Type':'application/json'}, body: JSON.stringify(payload)
         });
-        const json = await res.json();
+        // Try to parse JSON safely; if response is HTML (error page) handle gracefully
+        let json;
+        try { json = await res.json(); } catch(err) { json = null; }
         if(res.ok){
           // Show success message and any preview URLs (Ethereal) returned by server
-          let msg = json.message || 'Kayıt başarılı. Teşekkürler!';
+          let msg = (json && json.message) ? json.message : 'Kayıt başarılı. Teşekkürler!';
           if(json.userPreview || json.adminPreview){
             msg += ' Önizleme bağlantıları:';
             if(json.userPreview) msg += ` <a href="${json.userPreview}" target="_blank" rel="noopener">Abone e-postası</a>`;
@@ -61,7 +63,12 @@ document.addEventListener('DOMContentLoaded', ()=>{
           newsletterMsg.innerHTML = msg;
           newsletterForm.reset();
         } else {
-          newsletterMsg.textContent = json.error || 'Bir hata oluştu. Lütfen tekrar deneyin.';
+          // If the server returned non-JSON (html error page), include status text
+          if(json && json.error){
+            newsletterMsg.textContent = json.error;
+          } else {
+            newsletterMsg.textContent = `Bir hata oluştu (${res.status} ${res.statusText}). Lütfen tekrar deneyin.`;
+          }
         }
       }catch(err){
         console.error(err);
@@ -99,7 +106,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       email: data.get('email'),
       phone: data.get('phone'),
       tour: modalTitle.textContent,
-      date: data.get('date'),
       pax: data.get('pax'),
       notes: data.get('notes')
     };
@@ -107,13 +113,19 @@ document.addEventListener('DOMContentLoaded', ()=>{
     const statusEl = document.getElementById('bookingStatus');
     if(statusEl) statusEl.textContent = 'Gönderiliyor...';
     fetch('/api/book', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify(payload) })
-      .then(r=>r.json().then(j=>({ok:r.ok, body:j})))
-      .then(({ok, body})=>{
+      .then(async (r)=>{
+        // attempt to parse JSON, but handle HTML error pages gracefully
+        let body = null;
+        try { body = await r.json(); } catch(e) { body = null; }
+        return { ok: r.ok, status: r.status, statusText: r.statusText, body };
+      })
+      .then(({ok, status, statusText, body})=>{
         if(ok){
           if(statusEl) statusEl.innerHTML = 'Rezervasyon talebiniz alındı. Danışmanlarımız en kısa sürede sizinle iletişime geçecektir.';
           form.reset(); closeModal();
         } else {
-          statusEl.textContent = body.error || 'Bir hata oluştu. Lütfen daha sonra tekrar deneyin.';
+          if(body && body.error) statusEl.textContent = body.error;
+          else statusEl.textContent = `Bir hata oluştu (${status} ${statusText}). Lütfen daha sonra tekrar deneyin.`;
         }
       }).catch(err=>{
         console.error(err);
