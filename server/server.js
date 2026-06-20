@@ -1,6 +1,9 @@
-require('dotenv').config();
-const express = require('express');
 const path = require('path');
+const dotenv = require('dotenv');
+// Load root .env first (if present), then fallback to `server/.env` for local dev convenience.
+dotenv.config();
+dotenv.config({ path: path.join(__dirname, '.env') });
+const express = require('express');
 const nodemailer = require('nodemailer');
 const https = require('https');
 
