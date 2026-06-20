@@ -168,9 +168,19 @@
         <label>E-posta
           <input name="email" type="email" required />
         </label>
-        <label>Kişi Sayısı
-          <input name="guests" type="number" min="1" value="2" required />
+        <label>Telefon
+          <input name="phone" type="tel" placeholder="Örnek: +90555..." />
         </label>
+        <label>Tarih
+          <input name="date" type="date" />
+        </label>
+        <label>Kişi Sayısı
+          <input name="pax" type="number" min="1" value="2" required />
+        </label>
+        <label>Notlar (opsiyonel)
+          <textarea name="notes" rows="3" placeholder="Özel istekler veya notlar"></textarea>
+        </label>
+        <div id="bookingStatus" class="muted" aria-live="polite" style="margin-top:8px"></div>
         <button type="submit" class="btn primary">Gönder</button>
       </form>
     </div>
