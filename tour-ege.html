@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Ege Kıyıları — Orionis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">Orionis</a>
+      <nav class="nav">
+        <a href="/#tours">Turlar</a>
+        <a href="/#about">Hakkımızda</a>
+        <a href="/#contact">İletişim</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container tour-detail">
+    <div class="detail-hero" style="background-image:url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=60')">
+      <div class="detail-hero-inner">
+        <h1>Ege Kıyıları: Koylar & Lezzetler</h1>
+        <p class="muted">5 gün · Küçük grup</p>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <section class="detail-main">
+        <h2>Genel Bakış</h2>
+        <p>Mavi sular, sakin koylar ve Ege mutfağından lezzetler. Rahat tempoda keşif turu.</p>
+
+        <h3>Günlük Program</h3>
+        <ol>
+          <li>1. Gün: Buluşma, yerel pazar ve akşam yemeği.</li>
+          <li>2. Gün: Tekne turu ve gizli koylar.</li>
+          <li>3. Gün: Yerel yemek atölyesi ve köy gezisi.</li>
+          <li>4. Gün: Serbest keşif ve plaj.</li>
+          <li>5. Gün: Dönüş.</li>
+        </ol>
+
+        <h3>Galeriden Seçmeler</h3>
+        <div class="gallery">
+          <img src="https://images.unsplash.com/photo-1501963016392-4b6e89e9b2c6?auto=format&fit=crop&w=800&q=60" alt="Ege1">
+          <img src="https://images.unsplash.com/photo-1504704911891-2bd30f3c3a77?auto=format&fit=crop&w=800&q=60" alt="Ege2">
+          <img src="https://images.unsplash.com/photo-1519681393784-d120267933ba?auto=format&fit=crop&w=800&q=60" alt="Ege3">
+        </div>
+
+        <h3>Toplanma ve Kalkış Saatleri</h3>
+        <ul class="schedule">
+          <li>07:30 — İstanbul (havalanı transferi ile)</li>
+          <li>10:00 — Liman buluşma</li>
+          <li>16:30 — Gün sonu limandan dönüş</li>
+        </ul>
+
+      </section>
+
+      <aside class="detail-aside">
+        <div class="info-box">
+          <div class="price">₺3.450</div>
+          <p class="muted">Kişi başı · 5 gün</p>
+          <button class="btn primary book-btn" data-title="Ege Kıyıları: Koylar & Lezzetler" data-price="₺3.450">Rezervasyon Yap</button>
+          <hr />
+          <h4>Dahil Olanlar</h4>
+          <ul>
+            <li>2 gece otel</li>
+            <li>Tekne turu</li>
+            <li>Kahvaltı ve bir akşam yemeği</li>
+          </ul>
+          <h4>Toplanma Noktası</h4>
+          <p class="muted">Merkez liman, Aydın Mah. 12</p>
+        </div>
+      </aside>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-columns">
+        <div class="footer-col">
+          <h4>Kurumsal</h4>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <small>Copyright 2021 - Orionis</small>
+      </div>
+    </div>
+  </footer>
+
+  <!-- booking modal (same markup as homepage) -->
+  <div id="bookingModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Kapat">×</button>
+      <h3 id="modalTitle">Tur Rezervasyonu</h3>
+      <p id="modalPrice" class="muted"></p>
+      <form id="bookingForm">
+        <label>İsim
+          <input name="name" type="text" required />
+        </label>
+        <label>E-posta
+          <input name="email" type="email" required />
+        </label>
+        <label>Telefon
+          <input name="phone" type="tel" placeholder="Örnek: +90555..." />
+        </label>
+        <label>Kişi Sayısı
+          <input name="pax" type="number" min="1" value="2" required />
+        </label>
+        <label>Notlar (opsiyonel)
+          <textarea name="notes" rows="3" placeholder="Özel istekler veya notlar"></textarea>
+        </label>
+        <div id="bookingStatus" class="muted" aria-live="polite" style="margin-top:8px"></div>
+        <button type="submit" class="btn primary">Gönder</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

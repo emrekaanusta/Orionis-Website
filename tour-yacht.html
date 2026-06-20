@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Akdeniz Yat Kaçamağı — Orionis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">Orionis</a>
+      <nav class="nav">
+        <a href="/#tours">Turlar</a>
+        <a href="/#about">Hakkımızda</a>
+        <a href="/#contact">İletişim</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container tour-detail">
+    <div class="detail-hero" style="background-image:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=1600&q=60')">
+      <div class="detail-hero-inner">
+        <h1>Akdeniz Yat Kaçamağı</h1>
+        <p class="muted">3 gün · Küçük grup</p>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <section class="detail-main">
+        <h2>Genel Bakış</h2>
+        <p>Konforlu yat, özel koylar ve yüzme molalarıyla kısa ama lüks bir deniz deneyimi.</p>
+
+        <div class="gallery">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60" alt="Yacht1">
+          <img src="https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60" alt="Yacht2">
+        </div>
+
+        <h3>Kalkış / Dönüş Saatleri</h3>
+        <ul class="schedule">
+          <li>09:00 — Marina buluşma</li>
+          <li>17:00 — Limana dönüş</li>
+        </ul>
+      </section>
+
+      <aside class="detail-aside">
+        <div class="info-box">
+          <div class="price">₺4.200</div>
+          <p class="muted">Kişi başı · 3 gün</p>
+          <button class="btn primary book-btn" data-title="Akdeniz Yat Kaçamağı" data-price="₺4.200">Rezervasyon Yap</button>
+          <hr />
+          <h4>Dahil Olanlar</h4>
+          <ul>
+            <li>Yat konaklaması</li>
+            <li>Yemekler</li>
+            <li>Tekne mürettebatı</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-columns">
+      </div>
+      <div class="footer-bottom">
+        <small>Copyright 2021 - Orionis</small>
+      </div>
+    </div>
+  </footer>
+
+  <div id="bookingModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Kapat">×</button>
+      <h3 id="modalTitle">Tur Rezervasyonu</h3>
+      <p id="modalPrice" class="muted"></p>
+      <form id="bookingForm">
+        <label>İsim
+          <input name="name" type="text" required />
+        </label>
+        <label>E-posta
+          <input name="email" type="email" required />
+        </label>
+        <label>Telefon
+          <input name="phone" type="tel" placeholder="Örnek: +90555..." />
+        </label>
+        <label>Kişi Sayısı
+          <input name="pax" type="number" min="1" value="2" required />
+        </label>
+        <label>Notlar (opsiyonel)
+          <textarea name="notes" rows="3" placeholder="Özel istekler veya notlar"></textarea>
+        </label>
+        <div id="bookingStatus" class="muted" aria-live="polite" style="margin-top:8px"></div>
+        <button type="submit" class="btn primary">Gönder</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

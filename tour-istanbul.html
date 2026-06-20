@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>İstanbul Highlights — Orionis</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="brand" href="/">Orionis</a>
+      <nav class="nav">
+        <a href="/#tours">Turlar</a>
+        <a href="/#about">Hakkımızda</a>
+        <a href="/#contact">İletişim</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container tour-detail">
+    <div class="detail-hero" style="background-image:url('https://images.unsplash.com/photo-1505765057119-3f7b0d4f4a16?auto=format&fit=crop&w=1600&q=60')">
+      <div class="detail-hero-inner">
+        <h1>İstanbul Highlights</h1>
+        <p class="muted">1 gün · Özel tur</p>
+      </div>
+    </div>
+
+    <div class="detail-grid">
+      <section class="detail-main">
+        <h2>Genel Bakış</h2>
+        <p>Tarihi yarımada, Boğaz manzaraları ve gizli lezzet duraklarıyla dolu yoğun bir gün.</p>
+
+        <h3>Gün Akışı</h3>
+        <ol>
+          <li>Sultanahmet turu</li>
+          <li>Yerel lezzet durağı</li>
+          <li>Boğaz turu</li>
+        </ol>
+
+        <div class="gallery">
+          <img src="https://images.unsplash.com/photo-1522107176-4f4c1f2c7f32?auto=format&fit=crop&w=800&q=60" alt="Istanbul1">
+          <img src="https://images.unsplash.com/photo-1543340713-3fa5d5b507fb?auto=format&fit=crop&w=800&q=60" alt="Istanbul2">
+        </div>
+
+        <h3>Başlangıç Saatleri</h3>
+        <ul class="schedule">
+          <li>09:00 — Taksim Meydanı</li>
+          <li>10:30 — Sultanahmet</li>
+        </ul>
+      </section>
+
+      <aside class="detail-aside">
+        <div class="info-box">
+          <div class="price">₺950</div>
+          <p class="muted">Kişi başı · 1 gün</p>
+          <button class="btn primary book-btn" data-title="İstanbul Highlights" data-price="₺950">Rezervasyon Yap</button>
+          <hr />
+          <h4>Dahil Olanlar</h4>
+          <ul>
+            <li>Rehberlik</li>
+            <li>Öğle yemeği</li>
+          </ul>
+        </div>
+      </aside>
+    </div>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <div class="footer-columns">
+      </div>
+      <div class="footer-bottom">
+        <small>Copyright 2021 - Orionis</small>
+      </div>
+    </div>
+  </footer>
+
+  <div id="bookingModal" class="modal" aria-hidden="true">
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Kapat">×</button>
+      <h3 id="modalTitle">Tur Rezervasyonu</h3>
+      <p id="modalPrice" class="muted"></p>
+      <form id="bookingForm">
+        <label>İsim
+          <input name="name" type="text" required />
+        </label>
+        <label>E-posta
+          <input name="email" type="email" required />
+        </label>
+        <label>Telefon
+          <input name="phone" type="tel" placeholder="Örnek: +90555..." />
+        </label>
+        <label>Kişi Sayısı
+          <input name="pax" type="number" min="1" value="2" required />
+        </label>
+        <label>Notlar (opsiyonel)
+          <textarea name="notes" rows="3" placeholder="Özel istekler veya notlar"></textarea>
+        </label>
+        <div id="bookingStatus" class="muted" aria-live="polite" style="margin-top:8px"></div>
+        <button type="submit" class="btn primary">Gönder</button>
+      </form>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
